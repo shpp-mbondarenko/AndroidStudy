@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">lesson-3-ReadTextFromFile</string>
+    <string name="cat"><b>Кот программиста</b> \n</string>
+</resources>

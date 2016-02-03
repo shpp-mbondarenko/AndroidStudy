@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/hidebutton/hidebutton.iml" filepath="$PROJECT_DIR$/hidebutton/hidebutton.iml" />
       <module fileurl="file://$PROJECT_DIR$/learningWithMentor.iml" filepath="$PROJECT_DIR$/learningWithMentor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lesson-3-readtextfromfile/lesson-3-readtextfromfile.iml" filepath="$PROJECT_DIR$/lesson-3-readtextfromfile/lesson-3-readtextfromfile.iml" />
     </modules>
   </component>
 </project>

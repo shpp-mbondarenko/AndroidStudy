@@ -1,1 +1,1 @@
-include ':app', ':hidebutton'
+include ':app', ':hidebutton', ':lesson-3-readtextfromfile'
