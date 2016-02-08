@@ -1,10 +1,12 @@
 package ua.mycompany.lesson_4_alarmclock;
 
-import android.annotation.TargetApi;
+
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Build;
@@ -15,11 +17,11 @@ import android.util.Log;
 /**
  * Created by Maxim on 07.02.2016.
  */
-public class RingtonePlayingServise extends Service {
+public class RingtonePlayingService extends Service {
     MediaPlayer player;
     boolean isRunning;
     int startId;
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -53,32 +55,35 @@ public class RingtonePlayingServise extends Service {
         //music should starm playing
         if (!this.isRunning && startId == 1) {
             Log.e("there is no music", " and you want to start");
+
             //create instance of media player
             player = MediaPlayer.create(this, R.raw.ex);
             player.start();
 
             this.isRunning = true;
             this.startId = 0;
-
-            //notification
-            //set up notification service
-            NotificationManager simpNotifications = (NotificationManager)
-                    getSystemService(NOTIFICATION_SERVICE);
-            //set up an intent that goes to the MainActivity
-            Intent intentMainActivity = new Intent(getApplicationContext(), MainActivity.class);
-            //set up Pending intent
-            PendingIntent pendingMainActivity = PendingIntent.getActivity(this, 0,
-                    intentMainActivity,0);
-            //make the notification parameters
-            Notification notification;
-            notification = new Notification.Builder(this)
-                    .setContentTitle("An Alarm is going")
-                    .setContentText("Click me!")
-                    .setContentIntent(pendingMainActivity)
-                    .setAutoCancel(true)
-                    .build();
-            simpNotifications.notify(1, notification);
-
+            {
+                //notification
+                //set up notification service
+                NotificationManager simpNotifications = (NotificationManager)
+                        getSystemService(NOTIFICATION_SERVICE);
+                //set up an intent that goes to the MainActivity
+                Intent intentMainActivity = new Intent(getApplicationContext(), MainActivity.class);
+                //set up Pending intent
+                PendingIntent pendingMainActivity = PendingIntent.getActivity(this, 0,
+                        intentMainActivity, 0);
+                //make the notification parameters
+                int icon = android.R.drawable.sym_action_email;
+                CharSequence tickerText = "Your ClockAlarm Is working!!";
+                long when = System.currentTimeMillis();
+                Notification notification = new Notification(icon, tickerText, when);
+                Context context = getApplicationContext();
+                CharSequence contentTitle = "WAKE UP!!!";
+                CharSequence contentText = "It's time go to work!";
+                notification.flags = Notification.FLAG_AUTO_CANCEL;
+                notification.setLatestEventInfo(context, contentTitle, contentText, pendingMainActivity);
+                simpNotifications.notify(1, notification);
+            }
 
         }
         //if there is music playing, and the user pressed "alarm off"
@@ -91,8 +96,8 @@ public class RingtonePlayingServise extends Service {
 
             this.isRunning = false;
             this.startId = 0;
-    }
-    //these are if the user presses random buttons
+        }
+        //these are if the user presses random buttons
         //just do bug-proof the app
         //if there is no music playing AND the user pressed "alarm off"
         //do nothing
@@ -117,7 +122,7 @@ public class RingtonePlayingServise extends Service {
         return START_NOT_STICKY;
     }
     public void onDestroy(){
-    Log.e("on destroy","TADA");
+        Log.e("on destroy","TADA");
         super.onDestroy();
         this.isRunning = false;
     }

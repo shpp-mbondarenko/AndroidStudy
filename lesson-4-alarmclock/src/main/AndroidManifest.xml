@@ -16,7 +16,7 @@
             </intent-filter>
         </activity>
         <receiver android:name=".AlarmReceiver"/>
-        <service android:name=".RingtonePlayingServise"
+        <service android:name=".RingtonePlayingService"
             android:enabled="true"/>
 
     </application>

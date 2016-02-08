@@ -19,7 +19,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         Log.e("What is the key?", getStringFromIntentMainActivity);
 
         //create intent to ringtone service
-        Intent intentToRingtoneService = new Intent(context, RingtonePlayingServise.class);
+        Intent intentToRingtoneService = new Intent(context, RingtonePlayingService.class);
         //pass the extra string from MainActivity to the ringtone Service
         intentToRingtoneService.putExtra("extra", getStringFromIntentMainActivity);
         //start ringtone Service
