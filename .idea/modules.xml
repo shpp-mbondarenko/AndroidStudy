@@ -2,10 +2,16 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/alarmtraining/alarmtraining.iml" filepath="$PROJECT_DIR$/alarmtraining/alarmtraining.iml" />
+      <module fileurl="file://$PROJECT_DIR$/anotherexampleofalarm/anotherexampleofalarm.iml" filepath="$PROJECT_DIR$/anotherexampleofalarm/anotherexampleofalarm.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/hidebutton/hidebutton.iml" filepath="$PROJECT_DIR$/hidebutton/hidebutton.iml" />
       <module fileurl="file://$PROJECT_DIR$/learningWithMentor.iml" filepath="$PROJECT_DIR$/learningWithMentor.iml" />
       <module fileurl="file://$PROJECT_DIR$/lesson-3-readtextfromfile/lesson-3-readtextfromfile.iml" filepath="$PROJECT_DIR$/lesson-3-readtextfromfile/lesson-3-readtextfromfile.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lesson-4-alarmclock/lesson-4-alarmclock.iml" filepath="$PROJECT_DIR$/lesson-4-alarmclock/lesson-4-alarmclock.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lesson-5-activitylifecycle/lesson-5-activitylifecycle.iml" filepath="$PROJECT_DIR$/lesson-5-activitylifecycle/lesson-5-activitylifecycle.iml" />
+      <module fileurl="file://$PROJECT_DIR$/musicLessonTraining/musicLessonTraining.iml" filepath="$PROJECT_DIR$/musicLessonTraining/musicLessonTraining.iml" />
+      <module fileurl="file://$PROJECT_DIR$/usernotifications/usernotifications.iml" filepath="$PROJECT_DIR$/usernotifications/usernotifications.iml" />
     </modules>
   </component>
 </project>

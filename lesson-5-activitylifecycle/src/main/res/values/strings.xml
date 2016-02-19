@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">lesson-5-activityLifecycle</string>
+    <string name="hello">Welcome to Activity Lifecycle!</string>
+</resources>

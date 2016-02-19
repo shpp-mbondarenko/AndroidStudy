@@ -10,9 +10,15 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/alarmtraining" />
+            <option value="$PROJECT_DIR$/anotherexampleofalarm" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/hidebutton" />
             <option value="$PROJECT_DIR$/lesson-3-readtextfromfile" />
+            <option value="$PROJECT_DIR$/lesson-4-alarmclock" />
+            <option value="$PROJECT_DIR$/lesson-5-activitylifecycle" />
+            <option value="$PROJECT_DIR$/musicLessonTraining" />
+            <option value="$PROJECT_DIR$/usernotifications" />
           </set>
         </option>
       </GradleProjectSettings>

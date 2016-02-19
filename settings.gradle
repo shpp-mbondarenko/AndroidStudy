@@ -1,1 +1,1 @@
-include ':app', ':hidebutton', ':lesson-3-readtextfromfile'
+include ':app', ':hidebutton', ':lesson-3-readtextfromfile', ':musicLessonTraining', ':alarmtraining', ':anotherexampleofalarm', ':usernotifications', ':lesson-4-alarmclock', ':lesson-5-activitylifecycle'
