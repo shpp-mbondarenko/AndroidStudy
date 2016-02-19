@@ -11,7 +11,6 @@ public class MainActivity extends AppCompatActivity {
 
     Button btnTwo;
     Button btnThree;
-
     final String TAG = "ActivityState";
 
     @Override
