@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="ua.mycompany.maxplayplayer.MainActivity"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#6cd5eb">
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="PLAYLIST"
+            android:id="@+id/tVPlaylist"
+            android:layout_alignParentTop="true"
+            android:layout_alignRight="@+id/songsListView"
+            android:layout_alignEnd="@+id/songsListView"
+            android:autoText="false"
+            android:gravity="center_horizontal" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="300dp"
+            android:id="@+id/songsListView"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:background="#60e88b"
+            android:cacheColorHint="#701b71"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#6cd5eb">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="|&lt;"
+            android:onClick="onClickPrevious"
+            android:id="@+id/btnPrev"
+            android:layout_weight="1" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="||"
+            android:id="@+id/onClickPause"
+            android:onClick="onClickPause"
+            android:layout_weight="1" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=">|"
+            android:id="@+id/btnForward"
+            android:onClick="onClickForward"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <SeekBar
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/seekBarMusic"
+            android:layout_marginTop="0dp"
+            android:background="#60e88b"
+            android:indeterminate="false" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#6cd5eb">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Stop Serv"
+            android:id="@+id/btnStopService"
+            android:onClick="onClickStopService"
+            android:layout_below="@+id/songsListView"
+            android:layout_alignRight="@+id/songsListView"
+            android:layout_alignEnd="@+id/songsListView"
+            android:layout_weight="0.5" />
+    </LinearLayout>
+
+</LinearLayout>
