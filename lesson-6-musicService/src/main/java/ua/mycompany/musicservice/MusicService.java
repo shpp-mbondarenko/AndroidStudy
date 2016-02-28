@@ -4,6 +4,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Binder;
 import android.os.Environment;
 import android.os.IBinder;
@@ -15,20 +16,18 @@ import java.util.ArrayList;
 public class MusicService extends Service {
 
     MyBinder binder = new MyBinder();
-    private ArrayList<File> songs;
+    ArrayList<File> songs;
+    MediaPlayer mediaPlayer;
+    int position = -1;
+    Uri uri;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        mediaPlayer = new MediaPlayer();
+        songs = new ArrayList<File>();
         Log.d(MainActivity.LOG, "In Service");
-//        songs = getSongs();
-//        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-//        intent.putExtra(MainActivity.SONGLIST, songs);
-//        intent.putExtra(MainActivity.POS, "333");
-//        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
-//                PendingIntent.FLAG_UPDATE_CURRENT);
     }
-
 
 
     public MusicService() {
@@ -39,19 +38,48 @@ public class MusicService extends Service {
         return binder;
     }
 
-    public void previous() {
+    public void playerPrevious() {
         
     }
 
-    public void pause() {
+    public void playerPause() {
+        if (mediaPlayer.isPlaying()) {
+            mediaPlayer.pause();
+        } else {
+            mediaPlayer.start();
+        }
     }
 
-    public void forward() {
+    public void playerForward() {
 
     }
 
     public ArrayList<File> getSongs(File root) {
-        return findSongs(root);
+        songs = findSongs(root);
+        return songs;
+    }
+
+    public void play(int pos) {
+//        songs = getSongs(Environment.getExternalStorageDirectory());
+        if (pos == 0){
+            Log.d(MainActivity.LOG, "NULL Pos");
+        } else {
+            Log.d(MainActivity.LOG, "NE NULL " + pos);
+        }
+        position = pos;
+        if (mediaPlayer.isPlaying()) {
+            Log.d(MainActivity.LOG, "IS playing 1");
+            mediaPlayer.pause();
+            mediaPlayer.release();
+            uri = Uri.parse(songs.get(position).toString());
+            mediaPlayer = MediaPlayer.create(getApplicationContext(), uri);
+            mediaPlayer.start();
+        } else {
+            Log.d(MainActivity.LOG, "IS playing 2 size - " + songs.size());
+            uri = Uri.parse(songs.get(position).toString());
+            mediaPlayer = MediaPlayer.create(getApplicationContext(), uri);
+            mediaPlayer.start();
+        }
     }
 
     /*

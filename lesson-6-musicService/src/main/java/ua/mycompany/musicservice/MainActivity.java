@@ -1,11 +1,9 @@
 package ua.mycompany.musicservice;
 
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.IBinder;
@@ -13,11 +11,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.io.File;
@@ -29,16 +26,18 @@ public class MainActivity extends AppCompatActivity {
     static final String LOG = "log";
     public final static String POS = "Position";
     public final static String SONGLIST = "Songlist";
-    public final static String BROADCAST_ACTION = "dada";
+    public final static String PROGRESS = "Progress";
 
 
     boolean bound = false;
     ServiceConnection connection;
     Intent intent;
-    MusicService musicService;
+    MusicService musicService = new MusicService();
     String[] items;
     ListView lv;
     ArrayList<File> songsList;
+    int position = -1;
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -66,13 +65,9 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
+        //set list of music
         intent = new Intent(getApplicationContext(), MusicService.class);
-//        File root = Environment.getRootDirectory();
-         songsList = musicService.getSongs(Environment.getExternalStorageDirectory());
-//        Intent intentFromService = getIntent();
-//        songsList = (ArrayList) intentFromService.getParcelableArrayListExtra(SONGLIST);
-//        String b = intentFromService.getStringExtra(POS);
-//        Log.d(LOG, b.toString());
+        songsList = musicService.getSongs(Environment.getExternalStorageDirectory());
         items = new String[songsList.size()];
         for (int i = 0; i < songsList.size(); i++) {
             items[i] = songsList.get(i).getName().toString();
@@ -83,9 +78,20 @@ public class MainActivity extends AppCompatActivity {
                 items);
         lv.setAdapter(adapter);
 
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+        //set listener on list
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
+                position = pos;
+                musicService.play(pos);
+//                MediaPlayer mediaPlayer = new MediaPlayer();
+//                Uri uri = Uri.parse(songsList.get(position).toString());
+//                mediaPlayer = MediaPlayer.create(getApplicationContext(), uri);
+//                mediaPlayer.start();
+
+            }
+        });
+
     }
 
     public void onStart() {
@@ -95,35 +101,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickPrevious(View view) {
-        musicService.previous();
+        musicService.playerPrevious();
     }
 
     public void onClickPause(View view) {
-        musicService.pause();
+        musicService.playerPause();
     }
 
     public void onClickForward(View view) {
-        musicService.forward();
+        musicService.playerForward();
     }
 
     public void onClickStopService(View view) {
         unbindService(connection);
     }
 
-    private ArrayList<File> findSongs(File root) {
-        ArrayList<File> al = new ArrayList<File>();
-        File[] files = root.listFiles();
-        for (File oneFile : files) {
-            if (oneFile.isDirectory() && !oneFile.isHidden()) {
-                al.addAll(findSongs(oneFile));
-            } else {
-                if (oneFile.getName().endsWith(".mp3")) {
-                    al.add(oneFile);
-                }
-            }
-        }
-        return al;
-    }
 
-    
+
+
 }
