@@ -105,6 +105,12 @@
             android:layout_alignRight="@+id/songsListView"
             android:layout_alignEnd="@+id/songsListView"
             android:layout_weight="0.5" />
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/progressBar" />
     </LinearLayout>
 
 </LinearLayout>

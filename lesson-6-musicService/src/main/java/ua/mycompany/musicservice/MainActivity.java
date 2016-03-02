@@ -3,8 +3,7 @@ package ua.mycompany.musicservice;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.media.MediaPlayer;
-import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
@@ -13,9 +12,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
-
-import com.google.android.gms.common.api.GoogleApiClient;
+import android.widget.SeekBar;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -24,11 +23,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     static final String LOG = "log";
-    public final static String POS = "Position";
-    public final static String SONGLIST = "Songlist";
-    public final static String PROGRESS = "Progress";
+    public final static File ROOT = Environment.getExternalStorageDirectory();
 
-
+    Button stp;
     boolean bound = false;
     ServiceConnection connection;
     Intent intent;
@@ -36,19 +33,19 @@ public class MainActivity extends AppCompatActivity {
     String[] items;
     ListView lv;
     ArrayList<File> songsList;
-    int position = -1;
+    public static SeekBar seekBar;
 
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    private GoogleApiClient client;
+    MyTask mt;
+    Thread updateSeekBar;
+    boolean isMTRuning = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         lv = (ListView) findViewById(R.id.songsListView);
+        stp = (Button) findViewById(R.id.btnStopService);
 
 
         connection = new ServiceConnection() {
@@ -65,9 +62,10 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
+        seekBar = (SeekBar) findViewById(R.id.seekBarMusic);
         //set list of music
         intent = new Intent(getApplicationContext(), MusicService.class);
-        songsList = musicService.getSongs(Environment.getExternalStorageDirectory());
+        songsList = musicService.getSongs(ROOT);
         items = new String[songsList.size()];
         for (int i = 0; i < songsList.size(); i++) {
             items[i] = songsList.get(i).getName().toString();
@@ -82,17 +80,20 @@ public class MainActivity extends AppCompatActivity {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int pos, long id) {
-                position = pos;
+
+                if(isMTRuning) {
+                    mt.cancel(false);
+                }
+
+                mt = new MyTask();
                 musicService.play(pos);
-//                MediaPlayer mediaPlayer = new MediaPlayer();
-//                Uri uri = Uri.parse(songsList.get(position).toString());
-//                mediaPlayer = MediaPlayer.create(getApplicationContext(), uri);
-//                mediaPlayer.start();
+                mt.execute();
 
             }
         });
-
     }
+
+
 
     public void onStart() {
         super.onStart();
@@ -101,7 +102,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickPrevious(View view) {
+        if(isMTRuning) {
+            mt.cancel(false);
+        }
         musicService.playerPrevious();
+//        mt.execute();
     }
 
     public void onClickPause(View view) {
@@ -109,14 +114,67 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClickForward(View view) {
+        if(isMTRuning) {
+            mt.cancel(false);
+        }
         musicService.playerForward();
+//        mt.execute();
+
     }
 
     public void onClickStopService(View view) {
         unbindService(connection);
+        musicService.stopSelf();
     }
 
 
+    class MyTask extends AsyncTask<Void, Integer, Void> {
+        int progress;
+        @Override
+        protected void onPreExecute() {
 
+            super.onPreExecute();
+            seekBar.setProgress(0);
+            Log.d(LOG, "On onPreExecute()");
+            progress = 0;
+        }
+
+        //do handler to seek bar
+        @Override
+        protected Void doInBackground(Void... params) {
+            isMTRuning = true;
+            int duration = musicService.serviceDuration;
+            int onePercent = duration / 100;
+            Log.d(LOG, "DURATION = " + duration + " ONE PERSENT = " + onePercent);
+
+            for (int progress = 1; progress <= 100; progress++) {
+                try {
+                    Thread.sleep(onePercent);
+                    Log.d(LOG, "TRY IS WORK");
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                publishProgress(progress);
+                Log.d(LOG, "PERCENT = " + progress);
+                if (isCancelled()) return null; //this row interrupt doInBackground if it is need
+
+            }
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            seekBar.setProgress(values[0]);
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            Log.d(LOG, "On onPostExecute()");
+
+        }
+    }
 
 }
+

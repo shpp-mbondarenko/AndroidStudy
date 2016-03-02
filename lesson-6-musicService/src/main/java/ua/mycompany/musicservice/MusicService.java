@@ -5,6 +5,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Environment;
 import android.os.IBinder;
@@ -20,13 +21,16 @@ public class MusicService extends Service {
     MediaPlayer mediaPlayer;
     int position = -1;
     Uri uri;
+    int quantitySongs;
+    int serviceDuration;
 
     @Override
     public void onCreate() {
         super.onCreate();
         mediaPlayer = new MediaPlayer();
         songs = new ArrayList<File>();
-        Log.d(MainActivity.LOG, "In Service");
+//        songs = findSongs(MainActivity.ROOT);
+        Log.d(MainActivity.LOG, "In Service onCreate");
     }
 
 
@@ -39,7 +43,16 @@ public class MusicService extends Service {
     }
 
     public void playerPrevious() {
-        
+        if (position <= 0) {
+            position = quantitySongs;
+        } else {
+            position -= 1;
+        }
+        mediaPlayer.pause();
+        mediaPlayer.release();
+        uri = Uri.parse(songs.get(position).toString());
+        mediaPlayer = MediaPlayer.create(getApplicationContext(), uri);
+        mediaPlayer.start();
     }
 
     public void playerPause() {
@@ -51,6 +64,16 @@ public class MusicService extends Service {
     }
 
     public void playerForward() {
+        if (position > quantitySongs) {
+         position = 0;
+        } else {
+            position += 1;
+        }
+        mediaPlayer.pause();
+        mediaPlayer.release();
+        uri = Uri.parse(songs.get(position).toString());
+        mediaPlayer = MediaPlayer.create(getApplicationContext(), uri);
+        mediaPlayer.start();
 
     }
 
@@ -60,7 +83,8 @@ public class MusicService extends Service {
     }
 
     public void play(int pos) {
-//        songs = getSongs(Environment.getExternalStorageDirectory());
+        songs = getSongs(Environment.getExternalStorageDirectory());
+        quantitySongs = songs.size() - 1;
         if (pos == 0){
             Log.d(MainActivity.LOG, "NULL Pos");
         } else {
@@ -74,11 +98,15 @@ public class MusicService extends Service {
             uri = Uri.parse(songs.get(position).toString());
             mediaPlayer = MediaPlayer.create(getApplicationContext(), uri);
             mediaPlayer.start();
+            serviceDuration = mediaPlayer.getDuration();
+            Log.d(MainActivity.LOG, "SERVICE DURATION = " + serviceDuration );
         } else {
             Log.d(MainActivity.LOG, "IS playing 2 size - " + songs.size());
             uri = Uri.parse(songs.get(position).toString());
             mediaPlayer = MediaPlayer.create(getApplicationContext(), uri);
             mediaPlayer.start();
+            serviceDuration = mediaPlayer.getDuration();
+            Log.d(MainActivity.LOG, "SERVICE DURATION = " + serviceDuration);
         }
     }
 
@@ -106,4 +134,14 @@ public class MusicService extends Service {
             return MusicService.this;
         }
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mediaPlayer.stop();
+        mediaPlayer.release();
+        Log.d(MainActivity.LOG, "OnDestroy Service!!");
+    }
+
+
 }
