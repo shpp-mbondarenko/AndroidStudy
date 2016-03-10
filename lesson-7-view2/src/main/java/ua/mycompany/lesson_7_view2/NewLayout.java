@@ -18,19 +18,16 @@ public class NewLayout extends LinearLayout {
     public NewLayout(final Context context, AttributeSet attrs) {
         super(context, attrs);
         final NewLayout ll = NewLayout.this;
-//        SIZE_OF_ARR = ll.getChildCount();
-//        items = new float[SIZE_OF_ARR];
-//        Log.i(TAG, ""+SIZE_OF_ARR);
+
         setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 for (int i = 0; i < ll.getChildCount(); ++i) {
                     View child = ll.getChildAt(i);
-//                    items[i] = child.getY();
                     TranslateAnimation animation = new TranslateAnimation(0, 0,
-                            child.getY(),
+                            0,
                             ll.getHeight() - child.getHeight() - child.getY());
-                    TranslateAnimation ani = new TranslateAnimation(0, 0, child.getY(), ll.getHeight() - child.getHeight() - child.getY());
+
                     animation.setDuration(2000);
                     animation.setFillAfter(true);
                     child.startAnimation(animation);
@@ -47,7 +44,7 @@ public class NewLayout extends LinearLayout {
                     View child = ll.getChildAt(i);
                     TranslateAnimation animation = new TranslateAnimation(0, 0,
                             ll.getHeight() - child.getHeight() - child.getY(),
-                            child.getY());
+                            0);
                     animation.setDuration(2000);
                     animation.setFillAfter(true);
                     child.startAnimation(animation);
