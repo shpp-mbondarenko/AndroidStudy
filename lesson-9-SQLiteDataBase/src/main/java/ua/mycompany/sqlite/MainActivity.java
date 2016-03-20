@@ -15,7 +15,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    //database name
+
     private static final String DATA_BASE_NAME = "usersDB" ;
     private static final String TABLE_NAME = "Users";
     final String USER_NAME = "userName";
@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         findObjects();
 
-        // создаем объект для создания и управления версиями БД
+        // create object for creating and control DB
         dbHelper = new DBHelper(this);
 
         btnRegistration.setOnClickListener(this);
@@ -43,11 +43,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnViewUsers.setOnClickListener(this);
     }
 
-
-
-
-
-
+    //find buttons and edit text area
     private void findObjects() {
         btnRegistration = (Button) findViewById(R.id.btnRegistration);
         btnLogin  = (Button) findViewById(R.id.btnLogin);
@@ -60,14 +56,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        // создаем объект для данных
+        // create object for data
         ContentValues cv = new ContentValues();
 
-        // получаем данные из полей ввода
+        // receive data from the input fields
         String userName = eTUserName.getText().toString();
         String password = eTPassword.getText().toString();
 
-        // переменные для query
+        // variables for query
         String[] columns = null;
         String selection = null;
         String[] selectionArgs = null;
@@ -75,10 +71,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String having = null;
         String orderBy = null;
 
-        // подключаемся к БД
+        // connecting to DB
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-        // курсор
+        //Cursor
         Cursor c = null;
 
         switch (v.getId()) {
@@ -100,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (c != null) {
                     if (c.moveToFirst()) {
                         Log.d(LOG_TAG, "---TO TRANSFER ON HELLO ---");
-                        // определяем номера столбцов по имени в выборке
+                        // determine the number of columns
                         int idColIndex = c.getColumnIndex("id");
                         int nameColIndex = c.getColumnIndex("userName");
                         int passwordColIndex = c.getColumnIndex("password");
@@ -117,39 +113,39 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
             case R.id.btnRegistration:
-//                        Toast.makeText(getApplicationContext(),"Registration",Toast.LENGTH_SHORT).show();
+//              Toast.makeText(getApplicationContext(),"Registration",Toast.LENGTH_SHORT).show();
                 if (userName.equalsIgnoreCase("") || password.equalsIgnoreCase("")) {
                     Log.d(LOG_TAG, "--- Break LOGiN ---");
                     break;
                 }
                 Log.d(LOG_TAG, "--- Insert in mytable: ---");
 
-                // подготовим данные для вставки в виде пар: наименование столбца - значение
+                // prepare the data to be inserted, in the form of pairs: Column name - value
                 cv.put("userName", userName);
                 cv.put("password", password);
 
-                // вставляем запись и получаем ее ID
+                // insert one record and retrieving ID
                 long rowID = db.insert(TABLE_NAME, null, cv);
                 Log.d(LOG_TAG, "row inserted, ID = " + rowID);
                 break;
             case R.id.btnViewUsers:
-//                        Toast.makeText(getApplicationContext(),"Login",Toast.LENGTH_SHORT).show();
+//              Toast.makeText(getApplicationContext(),"Login",Toast.LENGTH_SHORT).show();
                 Log.d(LOG_TAG, "--- Rows in mytable: ---");
-                // делаем запрос всех данных из таблицы mytable, получаем Cursor
+                // make querry to DB retrieving all users
                 c = db.query(TABLE_NAME, null, null, null, null, null, null);
 
 
                 break;
             case R.id.btnClear:
                 Log.d(LOG_TAG, "--- Clear mytable: ---");
-                // удаляем все записи
+                // delete all users
                 int clearCount = db.delete(TABLE_NAME, null, null);
                 Log.d(LOG_TAG, "deleted rows count = " + clearCount);
                 break;
 
         }
-        // ставим позицию курсора на первую строку выборки
-        // если в выборке нет строк, вернется false
+        //place cursor on first position
+        // if c is null return false
         if (c != null) {
             if (c.moveToFirst()) {
                 //defining column's number by theirs name
