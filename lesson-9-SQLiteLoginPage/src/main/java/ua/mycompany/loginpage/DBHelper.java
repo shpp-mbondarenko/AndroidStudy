@@ -13,7 +13,7 @@ class DBHelper extends SQLiteOpenHelper {
     private static final String DATA_BASE_NAME = "usersDB";
     private static final String TABLE_NAME = "Users";
     private static final String ISLAND_TABLE = "islandTable";
-    final int DB_VERSION = 2;
+    private static final int DB_VERSION = 1;
     final String LOG_TAG = "myLogs";
 
     public DBHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
@@ -22,7 +22,7 @@ class DBHelper extends SQLiteOpenHelper {
 
     public DBHelper(Context context) {
         //constructor of superclass
-        super(context, DATA_BASE_NAME, null, 2);
+        super(context, DATA_BASE_NAME, null, DB_VERSION);
     }
 
     @Override
@@ -47,10 +47,23 @@ class DBHelper extends SQLiteOpenHelper {
         if (oldVersion == 1 && newVersion == 2) {
             db.beginTransaction();
             try {
+                db.execSQL("create temporary table Users_tmp ("
+                        + "id integer primary key autoincrement,"+ "island text," + "userName text," + "password text" + ");");
+
+                db.execSQL("insert into Users_tmp select id, island, userName, password from Users;");
+                db.execSQL("drop table Users;");
+
+                db.execSQL("create table Users ("
+                        + "id integer primary key autoincrement," + "island text," + "userName text," + "password text" + ");");
+
+                db.execSQL("insert into Users select id, name, posid from Users_tmp;");
+                db.execSQL("drop table Users_tmp;");
+                //add new table
                 db.execSQL("create table " + ISLAND_TABLE + " ("
-                        + "id integer primary key autoincrement,"
-                        + "island text"
-                        + ");");
+                        + "id integer primary key autoincrement," + "island text" + ");");
+
+
+                db.setTransactionSuccessful();
                 Log.d(LOG_TAG, " --- ADD successful ---");
             } finally {
                 db.endTransaction();

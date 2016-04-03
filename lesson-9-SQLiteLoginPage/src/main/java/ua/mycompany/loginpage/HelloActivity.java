@@ -54,9 +54,6 @@ public class HelloActivity extends Activity {
         tvIsland = (TextView)findViewById(R.id.tvIsland);
         btnLogOut = (Button) findViewById(R.id.btnLogOut);
 
-
-
-
         tvHello.setTextSize(25);
         tvIsland.setTextSize(25);
         tvHello.setText("Hello, " + name + ", nice to meet you!");
@@ -79,4 +76,12 @@ public class HelloActivity extends Activity {
         ed.commit();
         Log.d(LOG_TAG, "--- PREFERENCES CLEARED ---");
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        dbHelper.close();
+    }
+
+
 }

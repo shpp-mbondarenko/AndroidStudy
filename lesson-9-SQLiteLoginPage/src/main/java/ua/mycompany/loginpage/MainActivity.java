@@ -59,10 +59,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(sPref.getBoolean(S_PREF_ISLAND, true)) readIslands();
 
         findObjects();
-        btnRegistration.setOnClickListener(this);
-        btnLogin.setOnClickListener(this);
-        btnClear.setOnClickListener(this);
-        btnViewUsers.setOnClickListener(this);
     }
 
     //read islands from file. add islands in DataBase. one time.
@@ -117,7 +113,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
 
-
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -130,7 +125,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-
+        btnRegistration.setOnClickListener(this);
+        btnLogin.setOnClickListener(this);
+        btnClear.setOnClickListener(this);
+        btnViewUsers.setOnClickListener(this);
     }
 
     @Override
@@ -186,5 +184,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ed.apply();
         Log.d(LOG_TAG, "--- PREFERENCES SAVED ---" + sPref.getString(S_PREF_NAME, "") + " PASS -"
                 + sPref.getString(S_PREF_PASSWORD, ""));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        dbHelper.close();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        dbHelper = new DBHelper(getApplication());
+        db = dbHelper.getWritableDatabase();
     }
 }
